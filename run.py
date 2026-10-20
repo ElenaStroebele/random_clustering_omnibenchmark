@@ -51,7 +51,22 @@ with open(out/f"{args.name}.timings.json", "w") as f:
 with open(out/f"{args.name}.clustering_info.json", "w") as f:
     json.dump({}, f)
 
-pd.DataFrame({"cell_id": adata.obs_names}).to_csv(
-    out / f"{args.name}.pca.tsv", sep="\t", index=False
+
+sc.pp.pca(adata)
+
+pca = np.asarray(adata.obsm["X_pca"])
+
+pca_df = pd.DataFrame(
+    pca,
+    index=adata.obs_names,
+    columns=[f"PC{i + 1}" for i in range(pca.shape[1])],
 )
+pca_df.insert(0, "cell_id", adata.obs_names)
+
+pca_df.to_csv(
+    out / f"{args.name}.pca.tsv",
+    sep="\t",
+    index=False,
+)
+
 (out / f"{args.name}.hvgs.tsv").write_text("")
