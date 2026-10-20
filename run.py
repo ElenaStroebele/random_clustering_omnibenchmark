@@ -42,13 +42,13 @@ clusters = pd.DataFrame({
     "leiden": labels.astype(str),
 })
 
-clusters.to_csv(out/f"{args.name}.clusters.csv", sep="\t", index=False)
+clusters.to_csv(out/f"{args.name}.clusters.tsv", sep="\t", index=False)
 
 # Provide any outputs required by the benchmark
-with open(out/f"{args.name}.timings.tsv", "w") as f:
+with open(out/f"{args.name}.timings.json", "w") as f:
     json.dump({}, f)
 
-with open(out/f"{args.name}.clustering_info.tsv", "w") as f:
+with open(out/f"{args.name}.clustering_info.json", "w") as f:
     json.dump({}, f)
 
 pd.DataFrame({"cell_id": adata.obs_names}).to_csv(
